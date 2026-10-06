@@ -1,5 +1,5 @@
 const API_KEY = process.env.GROQ_API_KEY;
-const MODEL = 'llama-3.3-70b-versatile';
+const MODEL = 'openai/gpt-oss-120b';
 const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 // AI prompt
@@ -100,7 +100,11 @@ ${geocoded.join('\n')}
         { role: 'user', content: dataContext },
       ],
       temperature: 0.7,
-      max_tokens: 300,
+      // gpt-oss is a reasoning model: reasoning tokens count toward the limit,
+      // so keep effort low and leave headroom for the 3-4 sentence summary
+      reasoning_effort: 'low',
+      include_reasoning: false,
+      max_completion_tokens: 1024,
     })
   });
 
